@@ -1,0 +1,63 @@
+import React, { useState } from 'react';
+
+import './ExpenseForm.css';
+// That props given from the parent component (parent: NewExpense.js)
+const ExpenseForm = (props) => {
+    // These all are states for change and update useState
+    const [enteredTitle, setEnteredTitle] = useState('');
+    const [enteredAmount, setEnteredAmount] = useState('');
+    const [enteredDate, setEnteredDate] = useState('');
+
+    const titleChangeHandler = (event) => {
+        console.log(event.value)
+        setEnteredTitle(event.target.value);
+    };
+
+    const amountChangeHandler = (event) => {
+        setEnteredAmount(event.target.value);
+    };
+
+    const dateChangeHandler = (event) => {
+        setEnteredDate(event.target.value)
+    };
+
+    // This function is submit from all data
+    const submitHandler = (event) => {
+        event.preventDefault();
+
+        const expenseData = {
+            title: enteredTitle,
+            amount: enteredAmount,
+            date: new Date(enteredDate)
+        };
+
+        // This is function from child to parent (parent: NewExpense.js)
+        props.onSaveExpenseData(expenseData)
+        // console.log(expenseData);
+        setEnteredTitle('');
+        setEnteredAmount('');
+        setEnteredDate('');
+    };
+
+    return <form onSubmit={submitHandler}>
+        <div className="new-expense__controls">
+            <div className="new-expense__control">
+                <label for="">Title</label>
+                <input type="text" value={enteredTitle} onChange={titleChangeHandler}/>
+            </div>
+            <div className="new-expense__control">
+                <label for="">Amount</label>
+                <input type="number" min="0.01" step="0.01" value={enteredAmount} onChange={amountChangeHandler}/>
+            </div>
+            <div className="new-expense__control">
+                <label for="">Date</label>
+                <input type="date" min="2019-01-01" max="2022-12-31" value={enteredDate} onChange={dateChangeHandler}/>
+            </div>
+        </div>
+        <div className="new-expense__actions">
+            <button type="submit">Add Expense</button>
+        </div>
+    </form>
+};
+
+export default ExpenseForm;
